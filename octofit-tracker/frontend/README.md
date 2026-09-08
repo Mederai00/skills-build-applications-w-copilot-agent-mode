@@ -1,4 +1,22 @@
-# React + Vite
+# OctoFit Tracker Frontend
+
+The frontend reads the backend host from `VITE_CODESPACE_NAME`. Define it in
+`.env.local` when running in Codespaces:
+
+```bash
+VITE_CODESPACE_NAME=curly-bassoon-46gjpj97r66hjv79
+```
+
+When the variable is not set, the app safely falls back to
+`http://localhost:8000` for local backend development.
+
+## Development
+
+```bash
+npm run dev -- --host 0.0.0.0
+```
+
+The Vite development server runs on port `5173`.
 
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
