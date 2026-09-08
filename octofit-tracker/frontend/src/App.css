@@ -8,6 +8,7 @@
 .nav-link:hover, .nav-link.active { background: var(--lime); color: var(--ink); }
 .status-chip { color: var(--muted); font-family: 'DM Mono', monospace; font-size: .68rem; white-space: nowrap; }
 .status-chip span { background: #4eaa6a; border-radius: 50%; display: inline-block; height: .45rem; margin-right: .35rem; width: .45rem; }
+.auth-controls { align-items: center; display: flex; gap: .75rem; }.auth-button { background: var(--lime); border: 1px solid var(--ink); color: var(--ink); cursor: pointer; font-family: 'DM Mono', monospace; font-size: .68rem; padding: .5rem .7rem; text-transform: uppercase; }
 .page-content { margin: 0 auto; max-width: 1320px; padding: 4rem 2rem 6rem; }
 .overview-grid { display: grid; gap: 1.5rem; grid-template-columns: minmax(0, 1.7fr) minmax(280px, .8fr); }
 .intro-panel { border-top: 1px solid var(--ink); padding-top: 1.5rem; }

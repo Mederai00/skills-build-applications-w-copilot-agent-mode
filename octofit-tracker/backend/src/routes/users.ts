@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import User from '../models/User.js'
+import { authenticate, requireRole } from '../middleware/auth.js'
 
 const router = Router()
 
@@ -11,7 +12,7 @@ router.get('/', async (_request, response) => {
   }
 })
 
-router.post('/', async (request, response) => {
+router.post('/', authenticate, async (request, response) => {
   try {
     response.status(201).json(await User.create(request.body))
   } catch (error) {
@@ -19,9 +20,13 @@ router.post('/', async (request, response) => {
   }
 })
 
-router.put('/:id', async (request, response) => {
+router.put('/:id', authenticate, async (request, response) => {
   try {
-    const user = await User.findByIdAndUpdate(request.params.id, request.body, { new: true, runValidators: true })
+    if (request.authUser?.role !== 'admin' && request.authUser?.id !== request.params.id) return response.status(403).json({ error: 'You can only update your own profile' })
+    const updates = { ...request.body }
+    delete updates.passwordHash
+    if (request.authUser?.role !== 'admin') delete updates.role
+    const user = await User.findByIdAndUpdate(request.params.id, updates, { new: true, runValidators: true })
     if (!user) return response.status(404).json({ error: 'User not found' })
     response.json(user)
   } catch (error) {
@@ -29,7 +34,7 @@ router.put('/:id', async (request, response) => {
   }
 })
 
-router.delete('/:id', async (request, response) => {
+router.delete('/:id', authenticate, requireRole('admin'), async (request, response) => {
   try {
     const user = await User.findByIdAndDelete(request.params.id)
     if (!user) return response.status(404).json({ error: 'User not found' })

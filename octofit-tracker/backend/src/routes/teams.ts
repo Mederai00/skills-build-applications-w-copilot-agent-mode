@@ -1,5 +1,6 @@
 import { Router } from 'express'
 import Team from '../models/Team.js'
+import { authenticate, requireRole } from '../middleware/auth.js'
 
 const router = Router()
 
@@ -11,7 +12,7 @@ router.get('/', async (_request, response) => {
   }
 })
 
-router.post('/', async (request, response) => {
+router.post('/', authenticate, async (request, response) => {
   try {
     response.status(201).json(await Team.create(request.body))
   } catch (error) {
@@ -19,7 +20,7 @@ router.post('/', async (request, response) => {
   }
 })
 
-router.put('/:id', async (request, response) => {
+router.put('/:id', authenticate, async (request, response) => {
   try {
     const team = await Team.findByIdAndUpdate(request.params.id, request.body, { new: true, runValidators: true })
     if (!team) return response.status(404).json({ error: 'Team not found' })
@@ -29,7 +30,7 @@ router.put('/:id', async (request, response) => {
   }
 })
 
-router.delete('/:id', async (request, response) => {
+router.delete('/:id', authenticate, requireRole('admin'), async (request, response) => {
   try {
     const team = await Team.findByIdAndDelete(request.params.id)
     if (!team) return response.status(404).json({ error: 'Team not found' })

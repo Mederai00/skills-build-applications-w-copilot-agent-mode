@@ -1,4 +1,5 @@
 import mongoose from 'mongoose';
+import bcrypt from 'bcryptjs';
 import Activity from '../models/Activity.js';
 import Leaderboard from '../models/Leaderboard.js';
 import Team from '../models/Team.js';
@@ -15,6 +16,7 @@ async function seedDatabase() {
     await mongoose.connect(connectionString);
 
     console.log('Connected to octofit_db');
+    const passwordHash = await bcrypt.hash('octofit123', 10);
 
     await Promise.all([
       User.deleteMany({}),
@@ -25,10 +27,10 @@ async function seedDatabase() {
     ]);
 
     const users = await User.insertMany([
-      { name: 'Maya Chen', email: 'maya.chen@example.com', avatar: 'MC', totalPoints: 1280 },
-      { name: 'Jordan Rivera', email: 'jordan.rivera@example.com', avatar: 'JR', totalPoints: 1140 },
-      { name: 'Sam Okafor', email: 'sam.okafor@example.com', avatar: 'SO', totalPoints: 980 },
-      { name: 'Priya Shah', email: 'priya.shah@example.com', avatar: 'PS', totalPoints: 860 },
+      { name: 'Maya Chen', email: 'maya.chen@example.com', passwordHash, role: 'admin', avatar: 'MC', totalPoints: 1280 },
+      { name: 'Jordan Rivera', email: 'jordan.rivera@example.com', passwordHash, role: 'user', avatar: 'JR', totalPoints: 1140 },
+      { name: 'Sam Okafor', email: 'sam.okafor@example.com', passwordHash, role: 'user', avatar: 'SO', totalPoints: 980 },
+      { name: 'Priya Shah', email: 'priya.shah@example.com', passwordHash, role: 'user', avatar: 'PS', totalPoints: 860 },
     ]);
 
     await Team.insertMany([

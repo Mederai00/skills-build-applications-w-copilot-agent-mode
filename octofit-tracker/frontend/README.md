@@ -18,6 +18,13 @@ npm run dev -- --host 0.0.0.0
 
 The Vite development server runs on port `5173`.
 
+## Development accounts
+
+The seed script creates these accounts with password `octofit123`:
+
+- Admin: `maya.chen@example.com` (can delete records)
+- User: `jordan.rivera@example.com` (can create and update records)
+
 This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
 
 Currently, two official plugins are available:
