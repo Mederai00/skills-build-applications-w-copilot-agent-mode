@@ -1,12 +1,16 @@
 import { useEffect, useState } from 'react'
-import { fetchCollection } from '../api.js'
+import { fetchFromUrl } from '../api.js'
+
+const ACTIVITIES_API_URL = import.meta.env.VITE_CODESPACE_NAME
+  ? `https://${import.meta.env.VITE_CODESPACE_NAME}-8000.app.github.dev/api/activities/`
+  : 'http://localhost:8000/api/activities/'
 
 function Activities() {
   const [activities, setActivities] = useState([])
   const [error, setError] = useState('')
   useEffect(() => {
     const controller = new AbortController()
-    fetchCollection('activities', controller.signal).then(setActivities).catch((reason) => { if (reason.name !== 'AbortError') setError('Activities are unavailable right now.') })
+    fetchFromUrl(ACTIVITIES_API_URL, controller.signal).then(setActivities).catch((reason) => { if (reason.name !== 'AbortError') setError('Activities are unavailable right now.') })
     return () => controller.abort()
   }, [])
   return <ResourcePage eyebrow="ACTIVITY LOG" title="Recent movement" description="Every session adds a little more momentum.">

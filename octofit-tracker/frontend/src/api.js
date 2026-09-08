@@ -13,7 +13,11 @@ export function collectionFromResponse(payload) {
 }
 
 export async function fetchCollection(endpoint, signal) {
-  const response = await fetch(`${API_BASE_URL}/api/${endpoint}/`, { signal })
+  return fetchFromUrl(`${API_BASE_URL}/api/${endpoint}/`, signal)
+}
+
+export async function fetchFromUrl(url, signal) {
+  const response = await fetch(url, { signal })
   if (!response.ok) throw new Error(`Request failed with status ${response.status}`)
   return collectionFromResponse(await response.json())
 }
