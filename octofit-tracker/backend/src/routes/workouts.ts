@@ -19,4 +19,24 @@ router.post('/', async (request, response) => {
   }
 })
 
+router.put('/:id', async (request, response) => {
+  try {
+    const workout = await Workout.findByIdAndUpdate(request.params.id, request.body, { new: true, runValidators: true })
+    if (!workout) return response.status(404).json({ error: 'Workout not found' })
+    response.json(workout)
+  } catch (error) {
+    response.status(400).json({ error: 'Unable to update workout', details: String(error) })
+  }
+})
+
+router.delete('/:id', async (request, response) => {
+  try {
+    const workout = await Workout.findByIdAndDelete(request.params.id)
+    if (!workout) return response.status(404).json({ error: 'Workout not found' })
+    response.status(204).send()
+  } catch (error) {
+    response.status(400).json({ error: 'Unable to delete workout', details: String(error) })
+  }
+})
+
 export default router

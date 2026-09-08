@@ -21,3 +21,30 @@ export async function fetchFromUrl(url, signal) {
   if (!response.ok) throw new Error(`Request failed with status ${response.status}`)
   return collectionFromResponse(await response.json())
 }
+
+export async function createResource(url, payload) {
+  return sendResource(url, 'POST', payload)
+}
+
+export async function updateResource(url, payload) {
+  return sendResource(url, 'PUT', payload)
+}
+
+export async function deleteResource(url) {
+  const response = await fetch(url, { method: 'DELETE' })
+  if (!response.ok) {
+    const result = await response.json()
+    throw new Error(result.error ?? `Request failed with status ${response.status}`)
+  }
+}
+
+async function sendResource(url, method, payload) {
+  const response = await fetch(url, {
+    method,
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  })
+  const result = await response.json()
+  if (!response.ok) throw new Error(result.error ?? `Request failed with status ${response.status}`)
+  return result
+}

@@ -19,4 +19,24 @@ router.post('/', async (request, response) => {
   }
 })
 
+router.put('/:id', async (request, response) => {
+  try {
+    const user = await User.findByIdAndUpdate(request.params.id, request.body, { new: true, runValidators: true })
+    if (!user) return response.status(404).json({ error: 'User not found' })
+    response.json(user)
+  } catch (error) {
+    response.status(400).json({ error: 'Unable to update user', details: String(error) })
+  }
+})
+
+router.delete('/:id', async (request, response) => {
+  try {
+    const user = await User.findByIdAndDelete(request.params.id)
+    if (!user) return response.status(404).json({ error: 'User not found' })
+    response.status(204).send()
+  } catch (error) {
+    response.status(400).json({ error: 'Unable to delete user', details: String(error) })
+  }
+})
+
 export default router

@@ -19,4 +19,24 @@ router.post('/', async (request, response) => {
   }
 })
 
+router.put('/:id', async (request, response) => {
+  try {
+    const activity = await Activity.findByIdAndUpdate(request.params.id, request.body, { new: true, runValidators: true })
+    if (!activity) return response.status(404).json({ error: 'Activity not found' })
+    response.json(activity)
+  } catch (error) {
+    response.status(400).json({ error: 'Unable to update activity', details: String(error) })
+  }
+})
+
+router.delete('/:id', async (request, response) => {
+  try {
+    const activity = await Activity.findByIdAndDelete(request.params.id)
+    if (!activity) return response.status(404).json({ error: 'Activity not found' })
+    response.status(204).send()
+  } catch (error) {
+    response.status(400).json({ error: 'Unable to delete activity', details: String(error) })
+  }
+})
+
 export default router
